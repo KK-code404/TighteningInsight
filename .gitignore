@@ -1,0 +1,17 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+frontend/dist/
+# CHANGE [2026-10-10 11:39 +08:00] [WH400]: 排除 TypeScript 编译缓存，避免把本机生成状态提交到 GitHub。
+*.tsbuildinfo
+data/*.db
+downloads/*
+!downloads/.gitkeep
+logs/*
+!logs/.gitkeep
+screenshots/*
+!screenshots/.gitkeep
+automation/session.json
+
