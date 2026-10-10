@@ -1,17 +1,20 @@
 // CHANGE [2026-09-17 16:11 +08:00] [WH400]: 按浅色 B 端驾驶舱重构应用外壳，同时保留五个核心页面和移动端抽屉导航。
 import { useState } from 'react'
-import { Activity, Bot, Database, Gauge, LayoutDashboard, Menu, Settings, Table2 } from 'lucide-react'
+import { Activity, BellRing, Bot, Database, Gauge, LayoutDashboard, Menu, Settings, Table2 } from 'lucide-react'
 import Dashboard from './pages/Dashboard'
 import Records from './pages/Records'
 import Trends from './pages/Trends'
 import Capability from './pages/Capability'
 import Automation from './pages/Automation'
+import EmailAlerts from './pages/EmailAlerts'
 import type { PageKey } from './types'
 
+// CHANGE [2026-10-10 13:20 +08:00] [WH400]: 将邮件告警配置加入主导航，使质量人员可直接维护提醒规则。
 const nav = [
   ['dashboard', '首页', LayoutDashboard], ['records', '拧紧数据明细', Table2],
   ['trends', '拧紧趋势监控', Activity], ['capability', '过程能力计算', Gauge],
   ['automation', '自动导出任务', Bot],
+  ['alerts', '邮件告警配置', BellRing],
 ] as const
 
 // CHANGE [2026-09-17 16:11 +08:00] [WH400]: 统一桌面与移动端导航状态，选择页面后自动收起移动侧栏并保持顶部状态信息简洁。
@@ -33,6 +36,8 @@ export default function App() {
         {page === 'trends' ? <Trends/> : null}
         {page === 'capability' ? <Capability/> : null}
         {page === 'automation' ? <Automation/> : null}
+        {/* CHANGE [2026-10-10 13:20 +08:00] [WH400]: 在统一应用外壳中挂载邮件告警配置入口，管理员无需修改配置文件。 */}
+        {page === 'alerts' ? <EmailAlerts/> : null}
       </div>
     </main>
   </div>

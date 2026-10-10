@@ -58,6 +58,42 @@ def initialize_database() -> None:
                 row_count INTEGER DEFAULT 0,
                 message TEXT
             );
+            -- CHANGE [2026-10-10 13:20 +08:00] [WH400]: 在本机数据库保存单例邮件告警配置及发送去重记录，避免密码进入源码或 GitHub。
+            CREATE TABLE IF NOT EXISTS email_alert_config (
+                id INTEGER PRIMARY KEY CHECK (id = 1),
+                enabled INTEGER NOT NULL DEFAULT 0,
+                smtp_host TEXT NOT NULL DEFAULT '',
+                smtp_port INTEGER NOT NULL DEFAULT 587,
+                security TEXT NOT NULL DEFAULT 'starttls',
+                username TEXT NOT NULL DEFAULT '',
+                password TEXT NOT NULL DEFAULT '',
+                sender TEXT NOT NULL DEFAULT '',
+                recipients TEXT NOT NULL DEFAULT '',
+                subject_prefix TEXT NOT NULL DEFAULT '[拧紧数据告警]',
+                station TEXT NOT NULL DEFAULT '',
+                program TEXT NOT NULL DEFAULT '',
+                result_status TEXT NOT NULL DEFAULT 'Result was OK',
+                updated_at TEXT,
+                last_checked_at TEXT,
+                last_sent_at TEXT,
+                last_error TEXT
+            );
+            INSERT OR IGNORE INTO email_alert_config (id) VALUES (1);
+            CREATE TABLE IF NOT EXISTS email_alert_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                event_key TEXT NOT NULL UNIQUE,
+                event_date TEXT NOT NULL,
+                direction TEXT NOT NULL,
+                torque_average REAL NOT NULL,
+                upper_control REAL NOT NULL,
+                lower_control REAL NOT NULL,
+                mean REAL NOT NULL,
+                sigma REAL NOT NULL,
+                scope TEXT NOT NULL,
+                recipients TEXT NOT NULL,
+                sent_at TEXT NOT NULL
+            );
+            CREATE INDEX IF NOT EXISTS idx_email_alert_events_date ON email_alert_events(event_date DESC);
             """
         )
 
